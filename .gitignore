@@ -1,3 +1,4 @@
 /parte_2/vendor
 /parte_2/.phpunit.result.cache
 /parte_2/composer.lock
+/parte_2/.lando.yml
