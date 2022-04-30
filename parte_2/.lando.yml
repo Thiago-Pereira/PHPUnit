@@ -1,0 +1,27 @@
+name: parte_2
+recipe: lamp
+config:
+  webroot: .
+  xdebug: true
+services:
+  appserver:
+    overrides:
+      environment:
+        MINK_DRIVER_ARGS_WEBDRIVER: >-
+          ["chrome",
+          {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless",
+          "--no-sandbox","--disable-dev-shm-usage"]}}, "http://chrome:9515"]
+  chrome:
+    type: compose
+    services:
+      image: 'drupalci/webdriver-chromedriver:production'
+      command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
+  myservice:
+    type: node
+    build:
+      - yarn install
+    command: npm start
+tooling:
+  test:
+    service: appserver
+    cmd: php -d xdebug.remote_port=9003 /app/vendor/bin/phpunit -c /app/phpunit.xml
